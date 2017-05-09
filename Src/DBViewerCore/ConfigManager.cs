@@ -18,10 +18,10 @@ namespace DBViewer.Model.Core
             if (dicConfig.Count == 0)
             {
                 dicConfig[EnumDBType.SQLServer] = new ModelInfo("DBViewer.Model.SQLServer.dll", "DBViewer.Model.SQLServer.DBConfig");
-                dicConfig[EnumDBType.Oracle] = new ModelInfo("DBViewer.Model.Oracle.dll", "DBViewer.Model.Oracle.DBConfig");
+                dicConfig[EnumDBType.Oracle] = null;
 
                 dicViewerModel[EnumDBType.SQLServer] = new ModelInfo("DBViewer.Model.SQLServer.dll", "DBViewer.Model.SQLServer.DBViewerModel");
-                dicViewerModel[EnumDBType.Oracle] = new ModelInfo("DBViewer.Model.Oracle.dll", "DBViewer.Model.Oracle.DBViewerModel");
+                dicViewerModel[EnumDBType.Oracle] = null;
 
             }
         }

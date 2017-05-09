@@ -20,11 +20,10 @@ namespace DBViewer.Model.Core
         /// </summary>
         void ReBuildTrigger(string tableName);
 
-
         /// <summary>
-        /// 创建跟踪数据表
+        /// 移除触发器
         /// </summary>
-        void CreateTraceTable();
+        void RemoveTrigger();
 
         /// <summary>
         /// 返回表列表数据

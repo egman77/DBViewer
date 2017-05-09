@@ -33,6 +33,8 @@ namespace DBViewer.Model.SQLServer
         public void ReBuildTrigger(string tableName)
         {
 
+            EnsureCreateTable(m_cm);
+
             DataTable tableColumns = GetTableColumns(m_cm,tableName);
 
             DataRow[] rows = tableColumns.Select("typeName in ('text','ntext','image')");
@@ -173,7 +175,10 @@ namespace DBViewer.Model.SQLServer
             return ret.Substring(1);
         }
 
-
+        public void RemoveTrigger()
+        {
+            throw new NotImplementedException();
+        }
 
         public DataTable GetTraceData(string userName, DateTime startTime)
         {
@@ -220,11 +225,6 @@ namespace DBViewer.Model.SQLServer
                                                 +" where type = 'u' and name <> '{0}' order by name "
                                                 ,TABLENAME));
             return table;
-        }
-
-        public void CreateTraceTable()
-        {
-            EnsureCreateTable(m_cm);
         }
 
         #endregion

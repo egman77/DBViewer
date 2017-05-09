@@ -111,33 +111,31 @@ namespace DBViewer.UI
                 }
             }
 
-            if (dicUpdateData.Count > 0)
+            EnsureTableColumn(table, fixColumnsCount, dicUpdateData.Keys.Count * 2);
+
+            DataRow titleRow = table.NewRow();
+            DataRow valueRow = table.NewRow();
+              
+            int k = 0;
+            foreach (KeyValuePair<string, UpdateValue> keyValue in dicUpdateData)
             {
-                EnsureTableColumn(table, fixColumnsCount, dicUpdateData.Keys.Count * 2);
+                titleRow["F" + (k * 2).ToString()] = keyValue.Key;
+                titleRow["F" + (k * 2 + 1).ToString()] = keyValue.Key;
 
-                DataRow titleRow = table.NewRow();
-                DataRow valueRow = table.NewRow();
-
-                int k = 0;
-                foreach (KeyValuePair<string, UpdateValue> keyValue in dicUpdateData)
-                {
-                    titleRow["F" + (k * 2).ToString()] = keyValue.Key;
-                    titleRow["F" + (k * 2 + 1).ToString()] = keyValue.Key;
-
-                    valueRow["F" + (k * 2).ToString()] = keyValue.Value.OldValue;
-                    valueRow["F" + (k * 2 + 1).ToString()] = keyValue.Value.NewValue;
-                    k++;
-                }
-
-                titleRow["RecDate"] = GetDisplayDate(Util.ToDateTime(newRow["RecDate"]));
-                titleRow["status"] = EnumOperatorType.Update.ToString();
-                titleRow["TableName"] = newRow["TableName"];
-                titleRow["PKValue"] = newRow["PK"];
-                titleRow["SeqNo"] = table.Rows.Count / 2 + 1;
-
-                table.Rows.Add(titleRow);
-                table.Rows.Add(valueRow);
+                valueRow["F" + (k * 2).ToString()] = keyValue.Value.OldValue;
+                valueRow["F" + (k * 2 + 1).ToString()] = keyValue.Value.NewValue;
+                k++;
             }
+
+            titleRow["RecDate"] = GetDisplayDate(Util.ToDateTime(newRow["RecDate"]));
+            titleRow["status"] = EnumOperatorType.Update.ToString();
+            titleRow["TableName"] = newRow["TableName"];
+            titleRow["PKValue"] = newRow["PK"];
+            titleRow["SeqNo"] = table.Rows.Count / 2 + 1;
+
+            table.Rows.Add(titleRow);
+            table.Rows.Add(valueRow);
+
         }
 
         private void CreateNewOrDeleteRowData(DataTable table, int fixColumnsCount, DataRow row, EnumOperatorType status)

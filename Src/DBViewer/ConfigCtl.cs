@@ -32,7 +32,6 @@ namespace DBViewer.UI
                     ctl = GetPanelControl(EnumDBType.SQLServer);
                     break;
                 case 1:
-                    ctl = GetPanelControl(EnumDBType.Oracle);
                     break;
             }
 
@@ -68,7 +67,7 @@ namespace DBViewer.UI
                 node.Attributes.Append(attr);
                 node.AppendChild(m_doc.CreateNode(XmlNodeType.Element, "displaynull",string.Empty));
                 node.AppendChild(m_doc.CreateNode(XmlNodeType.Element, "userfieldname",string.Empty));
-                node.AppendChild(m_doc.CreateNode(XmlNodeType.Element, "traceuser", string.Empty)); 
+                node.AppendChild(m_doc.CreateNode(XmlNodeType.Element, "user", string.Empty)); 
                 
                 node.AppendChild(m_doc.CreateNode(XmlNodeType.Element, "server", string.Empty));
                 node.AppendChild(m_doc.CreateNode(XmlNodeType.Element, "user",string.Empty));

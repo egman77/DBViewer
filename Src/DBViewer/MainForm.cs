@@ -49,17 +49,12 @@ namespace DBViewer.UI
         {
 
             TableListForm form = new TableListForm();
-            form.Action =new DoActionDelegate(DoRebuilTrigger);
-            form.StartAction = new DoStartActionDelegate(DoCreateTable);
+            form.OnAction =new DoActionDelegate(DoRebuilTrigger);
             form.CurrentModel = m_currentModel;
             form.Show(this);
 
         }
 
-        private void DoCreateTable()
-        {
-            m_currentModel.CreateTraceTable();
-        }
         private void DoRebuilTrigger(DataRowView row)
         {
             m_currentModel.ReBuildTrigger(Util.ToString(row["name"]));
@@ -109,7 +104,7 @@ namespace DBViewer.UI
         private void btnDeleteTrigger_Click(object sender, EventArgs e)
         {
             TableListForm form = new TableListForm();
-            form.Action = new DoActionDelegate(DoDeleteTrigger);
+            form.OnAction = new DoActionDelegate(DoDeleteTrigger);
             form.CurrentModel = m_currentModel;
             form.Show(this);
         }

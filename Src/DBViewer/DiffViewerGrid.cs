@@ -22,9 +22,7 @@ namespace DBViewer.UI
         public void SetData(int fixColumn, DataTable table)
         {
             m_FixColumnCount = fixColumn;
-            int maxColumns = this.Columns.Count;
-
-            for (int i = m_FixColumnCount; i < maxColumns; i++)
+            for (int i = m_FixColumnCount; i < this.Columns.Count - m_FixColumnCount; i++)
             {
                 string columnName = "F" + (i - m_FixColumnCount).ToString();
                 this.Columns.Remove(columnName);
