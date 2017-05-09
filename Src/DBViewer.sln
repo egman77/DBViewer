@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBViewerUI", "DBViewer\DBViewerUI.csproj", "{EFE19A1B-4A20-4310-ADE6-179004E6F48C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0BEE7363-B83E-4C8D-8B6D-8C5313242B61} = {0BEE7363-B83E-4C8D-8B6D-8C5313242B61}
@@ -16,25 +18,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBViewerUI_WPF", "DBViewerUI_WPF\DBViewerUI_WPF.csproj", "{4EA72389-0436-4A3D-9A33-67333102D50D}"
 EndProject
 Global
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 6
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = DBViewer\\DBViewerUI.csproj
-		SccLocalPath1 = .
-		SccProjectFilePathRelativizedFromConnection1 = DBViewer\\
-		SccProjectUniqueName2 = DBViewerCore\\DBViewerCore.csproj
-		SccLocalPath2 = .
-		SccProjectFilePathRelativizedFromConnection2 = DBViewerCore\\
-		SccProjectUniqueName3 = SQLServerDBViewer\\SQLServerDBViewer.csproj
-		SccLocalPath3 = .
-		SccProjectFilePathRelativizedFromConnection3 = SQLServerDBViewer\\
-		SccProjectUniqueName4 = OracleDBViewer\\OracleDBViewer.csproj
-		SccLocalPath4 = .
-		SccProjectFilePathRelativizedFromConnection4 = OracleDBViewer\\
-		SccProjectUniqueName5 = DBViewerUI_WPF\\DBViewerUI_WPF.csproj
-		SccLocalPath5 = .
-		SccProjectFilePathRelativizedFromConnection5 = DBViewerUI_WPF\\
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU

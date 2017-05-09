@@ -3,5 +3,25 @@
 ################################################################################
 
 /Src/bin
+/Src/DBViewer/obj
 /Src/DBViewer/bin
-/Src/DBViewer/DBViewer/bin/Debug
+/Src/DBViewerCore/obj
+/Src/DBViewerCore/bin
+/Src/DBViewerUI_WPF/obj
+/Src/DBViewerUI_WPF/bin
+/Src/OracleDBViewer/obj
+/Src/OracleDBViewer/bin
+/Src/SQLServerDBViewer/obj
+/Src/SQLServerDBViewer/bin
+
+
+/Src/DBViewer/DBViewer/obj
+/Src/DBViewer/DBViewer/bin
+/Src/DBViewer/DBViewerCore/obj
+/Src/DBViewer/DBViewerCore/bin
+/Src/DBViewer/DBViewerUI_WPF/obj
+/Src/DBViewer/DBViewerUI_WPF/bin
+/Src/DBViewer/OracleDBViewer/obj
+/Src/DBViewer/OracleDBViewer/bin
+/Src/DBViewer/SQLServerDBViewer/obj
+/Src/DBViewer/SQLServerDBViewer/bin
