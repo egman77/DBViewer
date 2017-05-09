@@ -3,3 +3,5 @@
 ################################################################################
 
 /Src/bin
+/Src/DBViewer/bin
+/Src/DBViewer/DBViewer/bin/Debug

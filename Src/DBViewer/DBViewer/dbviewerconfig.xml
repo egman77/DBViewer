@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<dbtype type="SQLServer">
+  <displaynull>False</displaynull>
+  <userfieldname />
+  <server>127.0.0.1\SQLEXPRESS</server>
+  <user>sa</user>
+  <password>123</password>
+  <dbname>lyc</dbname>
+</dbtype>
