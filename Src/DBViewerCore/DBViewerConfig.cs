@@ -28,7 +28,8 @@ namespace DBViewer.Model.Core
     public enum EnumDBType
     {
         SQLServer,
-        Oracle
+        Oracle,
+        MySql
     }
 
     /// <summary>

@@ -43,35 +43,40 @@
             this.cmbDBType.FormattingEnabled = true;
             this.cmbDBType.Items.AddRange(new object[] {
             "SQL Server",
-            "Oracle"});
-            this.cmbDBType.Location = new System.Drawing.Point(106, 10);
+            "Oracle",
+            "MySql"});
+            this.cmbDBType.Location = new System.Drawing.Point(194, 18);
+            this.cmbDBType.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.cmbDBType.Name = "cmbDBType";
-            this.cmbDBType.Size = new System.Drawing.Size(121, 20);
+            this.cmbDBType.Size = new System.Drawing.Size(219, 29);
             this.cmbDBType.TabIndex = 0;
             this.cmbDBType.SelectedIndexChanged += new System.EventHandler(this.cmbDBType_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 13);
+            this.label1.Location = new System.Drawing.Point(42, 23);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 12);
+            this.label1.Size = new System.Drawing.Size(136, 21);
             this.label1.TabIndex = 1;
             this.label1.Text = "数据库类型：";
             // 
             // panelConfig
             // 
-            this.panelConfig.Location = new System.Drawing.Point(22, 36);
+            this.panelConfig.Location = new System.Drawing.Point(40, 63);
+            this.panelConfig.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.panelConfig.Name = "panelConfig";
-            this.panelConfig.Size = new System.Drawing.Size(438, 205);
+            this.panelConfig.Size = new System.Drawing.Size(803, 359);
             this.panelConfig.TabIndex = 2;
             // 
             // chkDisplayNull
             // 
             this.chkDisplayNull.AutoSize = true;
-            this.chkDisplayNull.Location = new System.Drawing.Point(22, 247);
+            this.chkDisplayNull.Location = new System.Drawing.Point(40, 432);
+            this.chkDisplayNull.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.chkDisplayNull.Name = "chkDisplayNull";
-            this.chkDisplayNull.Size = new System.Drawing.Size(72, 16);
+            this.chkDisplayNull.Size = new System.Drawing.Size(120, 25);
             this.chkDisplayNull.TabIndex = 3;
             this.chkDisplayNull.Text = "显示空值";
             this.chkDisplayNull.UseVisualStyleBackColor = true;
@@ -79,38 +84,42 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 278);
+            this.label2.Location = new System.Drawing.Point(37, 486);
+            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 12);
+            this.label2.Size = new System.Drawing.Size(126, 21);
             this.label2.TabIndex = 4;
             this.label2.Text = "用户字段名:";
             // 
             // txtUserFieldName
             // 
-            this.txtUserFieldName.Location = new System.Drawing.Point(97, 275);
+            this.txtUserFieldName.Location = new System.Drawing.Point(178, 481);
+            this.txtUserFieldName.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.txtUserFieldName.Name = "txtUserFieldName";
-            this.txtUserFieldName.Size = new System.Drawing.Size(189, 19);
+            this.txtUserFieldName.Size = new System.Drawing.Size(343, 31);
             this.txtUserFieldName.TabIndex = 5;
             // 
             // txtUser
             // 
-            this.txtUser.Location = new System.Drawing.Point(97, 300);
+            this.txtUser.Location = new System.Drawing.Point(178, 525);
+            this.txtUser.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.txtUser.Name = "txtUser";
-            this.txtUser.Size = new System.Drawing.Size(189, 19);
+            this.txtUser.Size = new System.Drawing.Size(343, 31);
             this.txtUser.TabIndex = 7;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(20, 303);
+            this.label3.Location = new System.Drawing.Point(37, 530);
+            this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(55, 12);
+            this.label3.Size = new System.Drawing.Size(105, 21);
             this.label3.TabIndex = 6;
             this.label3.Text = "跟踪用户:";
             // 
             // ConfigCtl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.txtUser);
             this.Controls.Add(this.label3);
@@ -120,8 +129,9 @@
             this.Controls.Add(this.panelConfig);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmbDBType);
+            this.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.Name = "ConfigCtl";
-            this.Size = new System.Drawing.Size(481, 339);
+            this.Size = new System.Drawing.Size(882, 593);
             this.Load += new System.EventHandler(this.ConfigCtl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

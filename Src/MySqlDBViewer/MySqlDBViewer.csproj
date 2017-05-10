@@ -7,8 +7,8 @@
     <ProjectGuid>{597F0D2C-DFCF-4FBF-882E-EF9C678DC376}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DBViewer.Model.MySQL</RootNamespace>
-    <AssemblyName>DBViewer.Model.MySQL</AssemblyName>
+    <RootNamespace>DBViewer.Model.MySql</RootNamespace>
+    <AssemblyName>DBViewer.Model.MySql</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

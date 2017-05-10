@@ -34,6 +34,9 @@ namespace DBViewer.UI
                 case 1:
                     ctl = GetPanelControl(EnumDBType.Oracle);
                     break;
+                case 2:
+                    ctl = GetPanelControl(EnumDBType.MySql);
+                    break;
             }
 
             if (ctl != null)

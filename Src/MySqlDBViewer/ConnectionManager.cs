@@ -6,7 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 
-namespace DBViewer.Model.MySQL
+namespace DBViewer.Model.MySql
 {
     class ConnectionManager
     {

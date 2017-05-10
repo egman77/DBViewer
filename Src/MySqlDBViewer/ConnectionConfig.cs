@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using DBViewer.Model.Core;
 
-namespace DBViewer.Model.MySQL
+namespace DBViewer.Model.MySql
 {
     public partial class ConnectionConfig : UserControl
     {

@@ -19,10 +19,11 @@ namespace DBViewer.Model.Core
             {
                 dicConfig[EnumDBType.SQLServer] = new ModelInfo("DBViewer.Model.SQLServer.dll", "DBViewer.Model.SQLServer.DBConfig");
                 dicConfig[EnumDBType.Oracle] = new ModelInfo("DBViewer.Model.Oracle.dll", "DBViewer.Model.Oracle.DBConfig");
+                dicConfig[EnumDBType.MySql] = new ModelInfo("DBViewer.Model.MySql.dll", "DBViewer.Model.MySql.DBConfig");
 
                 dicViewerModel[EnumDBType.SQLServer] = new ModelInfo("DBViewer.Model.SQLServer.dll", "DBViewer.Model.SQLServer.DBViewerModel");
                 dicViewerModel[EnumDBType.Oracle] = new ModelInfo("DBViewer.Model.Oracle.dll", "DBViewer.Model.Oracle.DBViewerModel");
-
+                dicViewerModel[EnumDBType.MySql] = new ModelInfo("DBViewer.Model.MySql.dll", "DBViewer.Model.MySql.DBViewerModel");
             }
         }
 

@@ -1,4 +1,4 @@
-﻿namespace DBViewer.Model.MySQL
+﻿namespace DBViewer.Model.MySql
 {
     partial class ConnectionConfig
     {

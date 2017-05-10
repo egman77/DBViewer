@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using DBViewer.Model.Core;
 
-namespace DBViewer.Model.MySQL
+namespace DBViewer.Model.MySql
 {
     class DBConfig:IDBConfig
     {

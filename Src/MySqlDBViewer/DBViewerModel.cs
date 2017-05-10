@@ -6,7 +6,7 @@ using System.Data;
 using System.Windows.Forms;
 using System.Net;
 
-namespace DBViewer.Model.MySQL
+namespace DBViewer.Model.MySql
 {
     class DBViewerModel:IDBViewerModel 
     {
