@@ -10,12 +10,14 @@ using DBViewer.Model.Core;
 namespace DBViewer.UI
 {
     public delegate void DoActionDelegate(DataRowView row);
+    public delegate void DoStartActionDelegate();
 
     public partial class TableListForm : Form
     {
         public IDBViewerModel CurrentModel;
 
-        public DoActionDelegate OnAction;
+        public DoActionDelegate Action;
+        public DoStartActionDelegate StartAction;
         public TableListForm()
         {
             InitializeComponent();
@@ -76,13 +78,16 @@ namespace DBViewer.UI
             this.dataGridView1.CurrentCell = null;
             int count = 0;
             int failedCount = 0;
+
+            OnStartAction();
+
             foreach (DataRowView row in view)
             {
                 if (Util.ToBool(row["selAll"]))
                 {
                     try
                     {
-                        DoAction(row);
+                        OnAction(row);
                         row["selAll"] = false;
                         count++;
                     }
@@ -99,11 +104,19 @@ namespace DBViewer.UI
             Util.ShowMessage(statusLabel.Text);
         }
 
-        private void DoAction(DataRowView row)
+        private void OnStartAction()
         {
-            if (OnAction != null)
+            if (StartAction != null)
             {
-                OnAction(row);
+                StartAction();
+            }
+        }
+
+        private void OnAction(DataRowView row)
+        {
+            if (Action != null)
+            {
+                Action(row);
             }
         }
 
