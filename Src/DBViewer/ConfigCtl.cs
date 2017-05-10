@@ -60,11 +60,11 @@ namespace DBViewer.UI
         private XmlNode GetDBTypeNode(EnumDBType enuDbType)
         {
             string dbtype = enuDbType.ToString();
-            XmlNode node = m_doc.SelectSingleNode(string.Format("dbtype[@type='{0}']", dbtype));
+            XmlNode node = m_doc.SelectSingleNode(string.Format("//dbtype[@type='{0}']", dbtype));
             if (node == null)
             {
-                m_doc.LoadXml("<?xml version=\"1.0\" encoding=\"utf-8\" ?><dbtype></dbtype>");
-                node = m_doc.SelectSingleNode("dbtype");
+                m_doc.LoadXml("<?xml version=\"1.0\" encoding=\"utf-8\" ?><dbTypes><dbtype></dbtype></dbTypes>");
+                node = m_doc.SelectSingleNode("//dbtype");
                 XmlAttribute attr = m_doc.CreateNode(XmlNodeType.Attribute,"type",string.Empty) as XmlAttribute;
                 attr.Value = dbtype;
 
@@ -80,7 +80,7 @@ namespace DBViewer.UI
                 
 
                
-                node = m_doc.SelectSingleNode(string.Format("dbtype[@type='{0}']", dbtype));
+                node = m_doc.SelectSingleNode(string.Format("//dbtype[@type='{0}']", dbtype));
             }
 
             return node;

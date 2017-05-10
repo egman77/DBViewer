@@ -73,7 +73,7 @@ namespace DBViewer.Model.Core
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(fileName);
-            XmlNode node = doc.SelectSingleNode("dbtype");
+            XmlNode node = doc.SelectSingleNode("//dbtype");
             DBViewerConfig config = DBViewerConfig.Create(node);
             return config;
         }
