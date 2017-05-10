@@ -46,22 +46,24 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(23, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(59, 12);
+            this.label1.Size = new System.Drawing.Size(53, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "服务器IP:";
+            this.label1.Visible = false;
             // 
             // serverName
             // 
             this.serverName.Location = new System.Drawing.Point(88, 19);
             this.serverName.Name = "serverName";
-            this.serverName.Size = new System.Drawing.Size(159, 21);
+            this.serverName.Size = new System.Drawing.Size(159, 19);
             this.serverName.TabIndex = 1;
+            this.serverName.Visible = false;
             // 
             // user
             // 
             this.user.Location = new System.Drawing.Point(88, 44);
             this.user.Name = "user";
-            this.user.Size = new System.Drawing.Size(159, 21);
+            this.user.Size = new System.Drawing.Size(159, 19);
             this.user.TabIndex = 3;
             // 
             // label2
@@ -69,7 +71,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(23, 47);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 12);
+            this.label2.Size = new System.Drawing.Size(31, 12);
             this.label2.TabIndex = 2;
             this.label2.Text = "用户:";
             // 
@@ -77,7 +79,7 @@
             // 
             this.password.Location = new System.Drawing.Point(88, 69);
             this.password.Name = "password";
-            this.password.Size = new System.Drawing.Size(159, 21);
+            this.password.Size = new System.Drawing.Size(159, 19);
             this.password.TabIndex = 5;
             // 
             // label3
@@ -85,7 +87,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(23, 72);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 12);
+            this.label3.Size = new System.Drawing.Size(31, 12);
             this.label3.TabIndex = 4;
             this.label3.Text = "密码:";
             // 
@@ -93,7 +95,7 @@
             // 
             this.dbname.Location = new System.Drawing.Point(88, 94);
             this.dbname.Name = "dbname";
-            this.dbname.Size = new System.Drawing.Size(159, 21);
+            this.dbname.Size = new System.Drawing.Size(159, 19);
             this.dbname.TabIndex = 7;
             // 
             // label4
@@ -101,7 +103,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(23, 97);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 12);
+            this.label4.Size = new System.Drawing.Size(43, 12);
             this.label4.TabIndex = 6;
             this.label4.Text = "数据库:";
             // 

@@ -4,6 +4,7 @@ using System.Text;
 using DBViewer.Model.Core;
 using System.Data;
 using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace DBViewer.Model.MySQL
 {
@@ -19,10 +20,10 @@ namespace DBViewer.Model.MySQL
         public DataTable GetData(string sql)
         {
             DataTable table = new DataTable();
-            using (SqlConnection conn = new SqlConnection(GetConnectionString()))
+            using (MySqlConnection conn = new MySqlConnection(GetConnectionString()))
             {
                 conn.Open();
-                SqlDataAdapter adp = new SqlDataAdapter(sql, conn);
+                MySqlDataAdapter adp = new MySqlDataAdapter(sql, conn);
                 adp.Fill(table);
                 conn.Close();
             }
@@ -33,19 +34,19 @@ namespace DBViewer.Model.MySQL
 
         public void ExecuteCmd(string sql)
         {
-            using (SqlConnection conn = new SqlConnection(GetConnectionString()))
+            using (MySqlConnection conn = new MySqlConnection(GetConnectionString()))
             {
                 
                 conn.Open();
-                SqlCommand cmd = new SqlCommand(sql, conn);
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
         }
         private string GetConnectionString()
         {
-           return string.Format("Data Source={0};Initial Catalog={1};User Id={2};Password={3}"
-                            ,config.server
+            //Server=127.0.0.1;Uid=root;Pwd=12345;Database=test;
+            return string.Format("Data Source={0};User Id={1};Password={2};"
                             ,config.dbname
                             ,config.user
                             ,config.password);
