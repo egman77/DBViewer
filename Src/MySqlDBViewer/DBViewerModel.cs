@@ -324,6 +324,10 @@ namespace DBViewer.Model.MySql
 
         }
 
+        /// <summary>
+        /// 获取当前库下的所有表名
+        /// </summary>
+        /// <returns></returns>
         public DataTable GetTableList()
         {
 
