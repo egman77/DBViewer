@@ -140,6 +140,13 @@ namespace DBViewer.UI
             }
         }
 
+        /// <summary>
+        /// 创建新行或删除行
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="fixColumnsCount"></param>
+        /// <param name="row"></param>
+        /// <param name="status"></param>
         private void CreateNewOrDeleteRowData(DataTable table, int fixColumnsCount, DataRow row, EnumOperatorType status)
         {
 
