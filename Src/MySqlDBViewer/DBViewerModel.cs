@@ -67,9 +67,9 @@ namespace DBViewer.Model.MySql
             //string sql = " select t.column_name as name,t.data_type as typeName from \n"
             //            + "user_tab_cols t \n"
             //            + "where t.table_name = '{0}' and t.data_type not in ('long')\n";
-            string sql = "select COLUMN_NAME as name , DATA_TYPE as typeName from information_schema.columns where table_name = '{0}'";
+            string sql = "select COLUMN_NAME as name , DATA_TYPE as typeName from information_schema.columns where  TABLE_SCHEMA='{0}' and table_name = '{1}' ";
 
-            return cm.GetData(string.Format(sql, tableName.ToUpper()));
+            return cm.GetData(string.Format(sql,cm.config.dbname, tableName));
         }
 
         private string GetTriggerName(string tableName)
@@ -91,80 +91,40 @@ namespace DBViewer.Model.MySql
 
             StringBuilder sqlBuilder = new StringBuilder();
 
-            string newTableFieldValue = GetTableValue(tableColumns,"NEW");
-            string oldTableFieldValue = GetTableValue(tableColumns,"OLD");
-            string newPKValue = GetPKValue(cm, tableColumns, tableName,"NEW");
-            string oldPKValue = GetPKValue(cm, tableColumns, tableName, "OLD");
-            //string newUserFieldName = GetSafeUserFieldName(tableColumns,"NEW");
-            //string oldUserFieldName = GetSafeUserFieldName(tableColumns, "OLD");
+            string tableFieldValue = GetTableValue(tableColumns);
+            string pkValue = GetPKValue(cm, tableColumns, tableName);
+            string userFieldName = GetSafeUserFieldName(tableColumns);
 
 
-
-            sqlBuilder.AppendFormat("CREATE OR REPLACE TRIGGER {1} AFTER INSERT OR DELETE OR UPDATE  on {0} \n", tableName, triggerName);
-            sqlBuilder.Append("REFERENCING OLD AS OLD NEW AS NEW \n");
-            sqlBuilder.Append("FOR EACH ROW \n");
-            sqlBuilder.Append("BEGIN\n"); 
-            sqlBuilder.Append("DECLARE status number(4); \n"); 
-            sqlBuilder.Append("BEGIN\n");
-            sqlBuilder.Append("     IF INSERTING THEN\n");
-            sqlBuilder.Append("         status := 1;\n");
-            sqlBuilder.Append("     ELSIF UPDATING THEN\n");
-            sqlBuilder.Append("         status :=2;\n");
-            sqlBuilder.Append("     ELSE\n");
-            sqlBuilder.Append("         status :=3;\n");
-            sqlBuilder.Append("     END IF;\n");    
-            
+            sqlBuilder.AppendFormat("create trigger dbvtr_{0} on {0} for INSERT,DELETE,UPDATE AS \n", tableName);
+            sqlBuilder.Append("BEGIN \n");
+            sqlBuilder.Append("declare @status int \n");
+            sqlBuilder.Append(" select @status = 2 \n");
+            sqlBuilder.Append("if not exists(select * from inserted) \n");
+            sqlBuilder.Append(" select @status = 3  \n");
+            sqlBuilder.Append("if not exists(select * from deleted) \n");
+            sqlBuilder.Append(" select @status = 1 \n");
 
             //Insert 语句记录
-            sqlBuilder.Append("IF (status = 1) THEN\n");
-            sqlBuilder.Append("   INSERT INTO dbv_LOGDATA (SEQNO,RecDate,tableName,tabletype,status,PK,data,updateuser)\n");
-            sqlBuilder.AppendFormat("   VALUES ({3}.NEXTVAL, SYSDATE,'{2}',0,status,{0},{1},SYS_CONTEXT('USERENV','IP_ADDRESS'));\n"
-                                , newPKValue
-                                , newTableFieldValue
-                                //, newUserFieldName
-                                , tableName
-                                , SEQUENCES
-                                );
-            sqlBuilder.Append("END IF;\n");
-
-            //Update 语句记录
-            sqlBuilder.Append("IF (status = 2) THEN\n");
-
-            sqlBuilder.Append("   INSERT INTO dbv_LOGDATA (SEQNO,RecDate,tableName,tabletype,status,PK,data,updateuser)\n");
-            sqlBuilder.AppendFormat("   VALUES ({3}.NEXTVAL,SYSDATE,'{2}',0,status,{0},{1},SYS_CONTEXT('USERENV','IP_ADDRESS'));\n"
-                                , newPKValue
-                                , newTableFieldValue
-                                //, newUserFieldName
-                                , tableName
-                                , SEQUENCES
-                                );
-
-            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA (SEQNO,RecDate,tableName,tabletype,status,PK,data,updateuser)\n");
-            sqlBuilder.AppendFormat("   VALUES ({3}.NEXTVAL,SYSDATE,'{2}',1,status,{0},{1},SYS_CONTEXT('USERENV','IP_ADDRESS'));\n"
-                                        , newPKValue
-                                        , oldTableFieldValue
-                                        //, newUserFieldName
-                                        , tableName
-                                        , SEQUENCES
-                                        );
-            sqlBuilder.Append("END IF;\n");
+            sqlBuilder.Append("IF (@status = 1 or @status = 2)\n");
+            sqlBuilder.Append("begin\n");
+            sqlBuilder.Append("   insert into dbv_LOGDATA (RecDate,tableName,tabletype,status,PK,data,updateuser)\n");
+            sqlBuilder.AppendFormat("   select getdate(),'{3}',0,@status,{0},{1},{2}\n", pkValue, tableFieldValue, userFieldName, tableName);
+            sqlBuilder.AppendFormat("   from inserted\n");
+            sqlBuilder.Append("end\n");
 
 
             //Delete 语句记录
-            sqlBuilder.Append("IF (status = 3) THEN\n");
-            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA (SEQNO,RecDate,tableName,tabletype,status,PK,data,updateuser)\n");
-            sqlBuilder.AppendFormat("   VALUES ({3}.NEXTVAL,SYSDATE,'{2}',1,status,{0},{1},SYS_CONTEXT('USERENV','IP_ADDRESS'));\n"
-                                    , oldPKValue
-                                    , oldTableFieldValue
-                                    //, oldUserFieldName
-                                    , tableName
-                                    , SEQUENCES
-                                    );
-            sqlBuilder.Append("END IF;\n");
+            sqlBuilder.Append("IF (@status = 3 or @status = 2)\n");
+            sqlBuilder.Append("begin\n");
+            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA (RecDate,tableName,tabletype,status,PK,data,updateuser)\n");
+            sqlBuilder.AppendFormat("   select getdate(),'{3}',1,@status,{0},{1},{2}\n", pkValue, tableFieldValue, userFieldName, tableName);
+            sqlBuilder.Append("   from deleted\n");
+            sqlBuilder.Append("end\n");
 
 
-            sqlBuilder.Append(" END;\n");
-            sqlBuilder.Append("END;\n");
+            sqlBuilder.Append("END \n");
+
 
             cm.ExecuteCmd(sqlBuilder.ToString());
 
@@ -201,12 +161,16 @@ namespace DBViewer.Model.MySql
             
         //}
 
-        private string GetPKValue(ConnectionManager cm,DataTable tableColumns, string tableName,string perfix)
+        private string GetPKValue(ConnectionManager cm,DataTable tableColumns, string tableName)
         {
-            string sql = string.Format("SELECT t1.COLUMN_NAME FROM USER_CONS_COLUMNS t1\n"
-                            + "  INNER JOIN USER_CONSTRAINTS t2 ON t1.TABLE_NAME = t2.TABLE_NAME and t1.CONSTRAINT_NAME = t2.CONSTRAINT_NAME \n"
-                            + "  WHERE t1.TABLE_NAME = '{0}' and t2.CONSTRAINT_TYPE = 'P' \n"
-                            + "  ORDER BY t1.POSITION", tableName);
+            //string sql = string.Format("SELECT t1.COLUMN_NAME FROM USER_CONS_COLUMNS t1\n"
+            //                + "  INNER JOIN USER_CONSTRAINTS t2 ON t1.TABLE_NAME = t2.TABLE_NAME and t1.CONSTRAINT_NAME = t2.CONSTRAINT_NAME \n"
+            //                + "  WHERE t1.TABLE_NAME = '{0}' and t2.CONSTRAINT_TYPE = 'P' \n"
+            //                + "  ORDER BY t1.POSITION", tableName);
+
+            string sql = "select COLUMN_NAME from information_schema.columns \n"+
+                $"where  TABLE_SCHEMA='{cm.config.dbname}' and table_name = '{tableName}' and COLUMN_KEY='PRI'"+
+                "ORDER BY ORDINAL_POSITION";
 
             DataTable pkData = cm.GetData(sql);
 
@@ -218,7 +182,7 @@ namespace DBViewer.Model.MySql
                     string columnName = (string)row["COLUMN_NAME"];
                     DataRow[] columnRows = tableColumns.Select("name = '" + columnName + "'");
 
-                    FillFieldValueString(sqlBuilder, columnRows[0],perfix);
+                    FillFieldValueString(sqlBuilder, columnRows[0]);
                 }
 
                 string ret = sqlBuilder.ToString();
@@ -237,18 +201,34 @@ namespace DBViewer.Model.MySql
         /// <param name="sqlBuilder"></param>
         /// <param name="row"></param>
         /// <param name="perfix"></param>
-        private static void FillFieldValueString(StringBuilder sqlBuilder,DataRow row,string perfix)
+        private static void FillFieldValueString(StringBuilder sqlBuilder,DataRow row)
         {
             // sqlBuilder.AppendFormat("|| NVL('{0}=' || substr(to_char(:{1}.{0}),0,20) || ';','')", row["name"],perfix);
             sqlBuilder.AppendFormat("+ isnull('{0}=' + convert(varchar,[{0}]) + ';','')", row["name"]);
         }
 
-        private string GetTableValue(DataTable table, string perfix)
+        private string GetSafeUserFieldName(DataTable tableColumns)
+        {
+            if (this.Coinfig.UserFieldName != string.Empty)
+            {
+                DataRow[] rows = tableColumns.Select("name = '" + this.Coinfig.UserFieldName + "'");
+                if (rows.Length > 0)
+                {
+                    return this.Coinfig.UserFieldName;
+                }
+            }
+
+            return "' '";
+
+
+        }
+
+        private string GetTableValue(DataTable table)
         {
             StringBuilder sql = new StringBuilder();
             foreach (DataRow row in table.Rows )
             {
-                FillFieldValueString(sql, row, perfix);
+                FillFieldValueString(sql, row);
             }
             string ret = sql.ToString();
             return ret.Substring(2);
