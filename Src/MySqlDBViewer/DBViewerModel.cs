@@ -326,10 +326,16 @@ namespace DBViewer.Model.MySql
 
         public DataTable GetTableList()
         {
-            DataTable table = m_cm.GetData(string.Format("SELECT TABLE_NAME AS name FROM USER_TABLES\n"
-                                                + " WHERE TABLE_NAME != '{0}' "
-                                                + " ORDER BY TABLE_NAME "
-                                                ,TABLENAME));
+
+            //var sql = string.Format("SELECT TABLE_NAME AS name FROM USER_TABLES\n"
+            //                                    + " WHERE TABLE_NAME != '{0}' "
+            //                                    + " ORDER BY TABLE_NAME ", TABLENAME);
+
+            var sql = string.Format("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES\n"
+                                               + " WHERE TABLE_SCHEMA = '{0}' and TABLE_NAME != '{0}' "
+                                               + " ORDER BY TABLE_NAME ",m_cm.config.dbname, TABLENAME);
+
+            DataTable table = m_cm.GetData(sql );
             return table;
         }
 
