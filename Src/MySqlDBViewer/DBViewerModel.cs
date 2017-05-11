@@ -26,12 +26,19 @@ namespace DBViewer.Model.MySql
 
         }
 
-     
+       /// <summary>
+       /// 删除触发器
+       /// </summary>
+       /// <param name="tableName"></param>
         public void DeleteTrigger(string tableName)
         {
             DeleteTrigger(m_cm, tableName);
         }
 
+        /// <summary>
+        ///  重建触发器
+        /// </summary>
+        /// <param name="tableName"></param>
         public void ReBuildTrigger(string tableName)
         {
 
@@ -49,11 +56,18 @@ namespace DBViewer.Model.MySql
         
         }
 
+        /// <summary>
+        /// 返回指定表的列信息
+        /// </summary>
+        /// <param name="cm"></param>
+        /// <param name="tableName"></param>
+        /// <returns></returns>
         private DataTable GetTableColumns(ConnectionManager cm, string tableName)
         {
-            string sql = " select t.column_name as name,t.data_type as typeName from \n"
-                        + "user_tab_cols t \n"
-                        + "where t.table_name = '{0}' and t.data_type not in ('long')\n";
+            //string sql = " select t.column_name as name,t.data_type as typeName from \n"
+            //            + "user_tab_cols t \n"
+            //            + "where t.table_name = '{0}' and t.data_type not in ('long')\n";
+            string sql = "select COLUMN_NAME as name , DATA_TYPE as typeName from information_schema.columns where table_name = '{0}'";
 
             return cm.GetData(string.Format(sql, tableName.ToUpper()));
         }
@@ -157,17 +171,16 @@ namespace DBViewer.Model.MySql
 
         }
 
+        /// <summary>
+        /// 删除触发器
+        /// </summary>
+        /// <param name="cm"></param>
+        /// <param name="triggerName"></param>
         private static void DeleteTrigger(ConnectionManager cm, string triggerName)
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append("DECLARE \n");
-            sql.Append("    v_count int;\n");
-            sql.Append("BEGIN \n");
-            sql.AppendFormat("SELECT  count(*) INTO v_count FROM USER_TRIGGERS WHERE TRIGGER_NAME = '{0}'; \n", triggerName);
-            sql.Append("    IF (v_count >= 1) THEN \n");
-            sql.AppendFormat("        EXECUTE IMMEDIATE 'drop trigger {0}';\n", triggerName);
-            sql.Append("    END IF; \n");
-            sql.Append("END; \n");
+            sql.AppendFormat("drop trigger if exists {0};", triggerName);
+   
 
             cm.ExecuteCmd(sql.ToString());
         }
@@ -218,9 +231,16 @@ namespace DBViewer.Model.MySql
 
         }
 
+        /// <summary>
+        /// 创建字段值的字符串表示
+        /// </summary>
+        /// <param name="sqlBuilder"></param>
+        /// <param name="row"></param>
+        /// <param name="perfix"></param>
         private static void FillFieldValueString(StringBuilder sqlBuilder,DataRow row,string perfix)
         {
-            sqlBuilder.AppendFormat("|| NVL('{0}=' || substr(to_char(:{1}.{0}),0,20) || ';','')", row["name"],perfix);
+            // sqlBuilder.AppendFormat("|| NVL('{0}=' || substr(to_char(:{1}.{0}),0,20) || ';','')", row["name"],perfix);
+            sqlBuilder.AppendFormat("+ isnull('{0}=' + convert(varchar,[{0}]) + ';','')", row["name"]);
         }
 
         private string GetTableValue(DataTable table, string perfix)
@@ -270,31 +290,28 @@ namespace DBViewer.Model.MySql
             catch { }
         }
 
+        /// <summary>
+        /// 删除和创建指定的表
+        /// </summary>
+        /// <param name="cm"></param>
         private void EnsureCreateTable(ConnectionManager cm)
         {
             
             StringBuilder sql = new StringBuilder();
-            sql.Append("DECLARE \n");
-            sql.Append("    v_count int;\n");
-            sql.Append("BEGIN \n");
-            sql.AppendFormat("SELECT  count(*) INTO v_count FROM USER_TABLES WHERE TABLE_NAME = '{0}'; \n", TABLENAME);
-            sql.Append("  IF (v_count >= 1) THEN \n");
-            sql.AppendFormat("        EXECUTE IMMEDIATE 'DROP TABLE {0}'; \n", TABLENAME);
-            sql.Append("    END IF;\n");
-            sql.Append("END;\n");
-
+            sql.AppendFormat("DROP TABLE IF EXISTS {0}",TABLENAME);
+          
             cm.ExecuteCmd(sql.ToString());
 
             sql = new StringBuilder();
             sql.AppendFormat("  CREATE  TABLE {0} ( \n"
-                     + " SEQNO  int   NOT NULL\n"
+                     + " SEQNO  int auto_increment  NOT NULL\n"
                      + ",TABLETYPE int  \n"
                      + ",RecDate DATE\n"
-                     + ",tablename  varchar2(40)  \n"
+                     + ",tablename  varchar(40)  \n"
                      + ",status  int  \n"
-                     + ",PK  VARCHAR2(200) \n"
-                     + ",Data  VARCHAR2(3000) \n"
-                     + ",UpdateUser  VARCHAR2(20) not null \n"
+                     + ",PK  VARCHAR(200) \n"
+                     + ",Data  VARCHAR(3000) \n"
+                     + ",UpdateUser  VARCHAR(20) not null \n"
                      + ",CONSTRAINT PK_DGV_LOGDATA PRIMARY KEY  (SeqNo) \n"
                      + " ) "
                     , TABLENAME);
@@ -304,6 +321,11 @@ namespace DBViewer.Model.MySql
         }
 
 
+        /// <summary>
+        /// 清除和创建的表队列
+        /// </summary>
+        /// <param name="cm"></param>
+        [Obsolete("可能不需要")]
         private void EnsureCreateSequences(ConnectionManager cm)
         {
 
@@ -335,7 +357,7 @@ namespace DBViewer.Model.MySql
             //                                    + " WHERE TABLE_NAME != '{0}' "
             //                                    + " ORDER BY TABLE_NAME ", TABLENAME);
 
-            var sql = string.Format("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES\n"
+            var sql = string.Format("SELECT TABLE_NAME as name FROM INFORMATION_SCHEMA.TABLES\n"
                                                + " WHERE TABLE_SCHEMA = '{0}' and TABLE_NAME != '{0}' "
                                                + " ORDER BY TABLE_NAME ",m_cm.config.dbname, TABLENAME);
 
@@ -344,12 +366,14 @@ namespace DBViewer.Model.MySql
         }
 
       
-
+        /// <summary>
+        /// 创建跟踪表
+        /// </summary>
         public void CreateTraceTable()
         {
 
             EnsureCreateTable(m_cm);
-            EnsureCreateSequences(m_cm);
+           // EnsureCreateSequences(m_cm);
         }
 
         #endregion
