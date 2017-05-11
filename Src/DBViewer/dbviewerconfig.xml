@@ -14,10 +14,10 @@
     <displaynull>False</displaynull>
     <userfieldname />
     <traceuser>lyc</traceuser>
-    <server>127.0.0.1\SQLEXPRESS</server>
-    <user>sa</user>
-    <password>456</password>
-    <dbname>lyc</dbname>
+    <server>localhost</server>
+    <user>root</user>
+    <password>__CarveOut</password>
+    <dbname>world</dbname>
 
   </dbtype>
   <dbtype type="Oracle">
