@@ -91,41 +91,38 @@ namespace DBViewer.Model.MySql
 
             StringBuilder sqlBuilder = new StringBuilder();
 
-            string tableFieldValue = GetTableValue(tableColumns);
-            string pkValue = GetPKValue(cm, tableColumns, tableName);
-            string userFieldName = GetSafeUserFieldName(tableColumns);
+            string newTableFieldValue = GetTableValue(tableColumns, "NEW");
+            string oldTableFieldValue = GetTableValue(tableColumns, "OLD");
+            string newPKValue = GetPKValue(cm, tableColumns, tableName, "NEW");
+            string oldPKValue = GetPKValue(cm, tableColumns, tableName, "OLD");
 
+            string newUserFieldName = "";
+            string oldUserFieldName = "";
+            //string newUserFieldName = GetSafeUserFieldName(tableColumns,"NEW");
+            //string oldUserFieldName = GetSafeUserFieldName(tableColumns, "OLD");
 
-            sqlBuilder.AppendFormat("create trigger dbvtr_{0} on {0} for INSERT,DELETE,UPDATE AS \n", tableName);
-            sqlBuilder.Append("BEGIN \n");
-            sqlBuilder.Append("declare @status int \n");
-            sqlBuilder.Append(" select @status = 2 \n");
-            sqlBuilder.Append("if not exists(select * from inserted) \n");
-            sqlBuilder.Append(" select @status = 3  \n");
-            sqlBuilder.Append("if not exists(select * from deleted) \n");
-            sqlBuilder.Append(" select @status = 1 \n");
-
+            //1--insert 2--update 3--delete ,DELETE,UPDATE
             //Insert 语句记录
-            sqlBuilder.Append("IF (@status = 1 or @status = 2)\n");
-            sqlBuilder.Append("begin\n");
-            sqlBuilder.Append("   insert into dbv_LOGDATA (RecDate,tableName,tabletype,status,PK,data,updateuser)\n");
-            sqlBuilder.AppendFormat("   select getdate(),'{3}',0,@status,{0},{1},{2}\n", pkValue, tableFieldValue, userFieldName, tableName);
-            sqlBuilder.AppendFormat("   from inserted\n");
-            sqlBuilder.Append("end\n");
+            sqlBuilder.AppendFormat("create trigger dbvtr_{0}_insert after INSERT  on {0} for each row \n", tableName);
+            sqlBuilder.Append("BEGIN \n");    
+            //RecDate,tableName,tabletype,status,PK,data,updateuser
+            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},{2});\n", newPKValue, newTableFieldValue, newUserFieldName, tableName);
+            sqlBuilder.Append("END;\n");
 
+            //Update 语句记录
+            sqlBuilder.AppendFormat("create trigger dbvtr_{0}_update after Update  on {0} for each row \n", tableName);
+            sqlBuilder.Append("BEGIN \n");
+            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},{2});\n", newPKValue, newTableFieldValue, newUserFieldName, tableName);
+            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},{2});\n", oldPKValue, oldTableFieldValue, oldUserFieldName, tableName);
+            sqlBuilder.Append("END;\n");
 
             //Delete 语句记录
-            sqlBuilder.Append("IF (@status = 3 or @status = 2)\n");
-            sqlBuilder.Append("begin\n");
-            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA (RecDate,tableName,tabletype,status,PK,data,updateuser)\n");
-            sqlBuilder.AppendFormat("   select getdate(),'{3}',1,@status,{0},{1},{2}\n", pkValue, tableFieldValue, userFieldName, tableName);
-            sqlBuilder.Append("   from deleted\n");
-            sqlBuilder.Append("end\n");
+            sqlBuilder.AppendFormat("create trigger dbvtr_{0}_delete after Delete  on {0} for each row \n", tableName);         
+            sqlBuilder.Append("BEGIN \n");
+            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},{2});\n", oldPKValue, oldTableFieldValue, oldUserFieldName, tableName);
+            sqlBuilder.Append("END; \n");
 
-
-            sqlBuilder.Append("END \n");
-
-
+      
             cm.ExecuteCmd(sqlBuilder.ToString());
 
 
@@ -161,7 +158,7 @@ namespace DBViewer.Model.MySql
             
         //}
 
-        private string GetPKValue(ConnectionManager cm,DataTable tableColumns, string tableName)
+        private string GetPKValue(ConnectionManager cm,DataTable tableColumns, string tableName,string perfix)
         {
             //string sql = string.Format("SELECT t1.COLUMN_NAME FROM USER_CONS_COLUMNS t1\n"
             //                + "  INNER JOIN USER_CONSTRAINTS t2 ON t1.TABLE_NAME = t2.TABLE_NAME and t1.CONSTRAINT_NAME = t2.CONSTRAINT_NAME \n"
@@ -182,7 +179,7 @@ namespace DBViewer.Model.MySql
                     string columnName = (string)row["COLUMN_NAME"];
                     DataRow[] columnRows = tableColumns.Select("name = '" + columnName + "'");
 
-                    FillFieldValueString(sqlBuilder, columnRows[0]);
+                    FillFieldValueString(sqlBuilder, columnRows[0],perfix);
                 }
 
                 string ret = sqlBuilder.ToString();
@@ -201,10 +198,10 @@ namespace DBViewer.Model.MySql
         /// <param name="sqlBuilder"></param>
         /// <param name="row"></param>
         /// <param name="perfix"></param>
-        private static void FillFieldValueString(StringBuilder sqlBuilder,DataRow row)
+        private static void FillFieldValueString(StringBuilder sqlBuilder,DataRow row,string perfix)
         {
             // sqlBuilder.AppendFormat("|| NVL('{0}=' || substr(to_char(:{1}.{0}),0,20) || ';','')", row["name"],perfix);
-            sqlBuilder.AppendFormat("+ isnull('{0}=' + convert(varchar,[{0}]) + ';','')", row["name"]);
+            sqlBuilder.AppendFormat("+ isnull('{0}=' + convert(varchar,[{1}.{0}]) + ';','')", row["name"],perfix);
         }
 
         private string GetSafeUserFieldName(DataTable tableColumns)
@@ -222,17 +219,17 @@ namespace DBViewer.Model.MySql
 
 
         }
-
-        private string GetTableValue(DataTable table)
+        private string GetTableValue(DataTable table, string perfix)
         {
             StringBuilder sql = new StringBuilder();
-            foreach (DataRow row in table.Rows )
+            foreach (DataRow row in table.Rows)
             {
-                FillFieldValueString(sql, row);
+                FillFieldValueString(sql, row, perfix);
             }
             string ret = sql.ToString();
             return ret.Substring(2);
         }
+
 
         public void RemoveTrigger()
         {
