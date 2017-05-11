@@ -137,7 +137,10 @@ namespace DBViewer.Model.MySql
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendFormat("drop trigger if exists {0};", triggerName);
-   
+            sql.AppendFormat("drop trigger if exists {0}_insert;", triggerName);
+            sql.AppendFormat("drop trigger if exists {0}_update;", triggerName);
+            sql.AppendFormat("drop trigger if exists {0}_delete;", triggerName);
+
 
             cm.ExecuteCmd(sql.ToString());
         }
