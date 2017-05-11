@@ -82,7 +82,7 @@ namespace DBViewer.Model.Core
             node.SelectSingleNode("password").InnerXml = password;
             node.SelectSingleNode("dbname").InnerXml = dbname;
             
-
+           
         }
     }
 }

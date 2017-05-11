@@ -66,7 +66,7 @@ namespace DBViewer.Model.Core
         }
 
         /// <summary>
-        /// 保存配置信息
+        /// 读取配置信息
         /// </summary>
         /// <param name="config"></param>
         public static DBViewerConfig GetConfig(string fileName)
@@ -74,6 +74,21 @@ namespace DBViewer.Model.Core
             XmlDocument doc = new XmlDocument();
             doc.Load(fileName);
             XmlNode node = doc.SelectSingleNode("//dbtype");
+            DBViewerConfig config = DBViewerConfig.Create(node);
+            return config;
+        }
+
+        /// <summary>
+        /// 读取默认的配置信息
+        /// </summary>
+        /// <param name="config"></param>
+        public static DBViewerConfig GetDefaultTypeConfig(string fileName)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(fileName);
+            XmlNode root=doc?.SelectSingleNode("/dbTypes");
+
+            XmlNode node = root?.SelectSingleNode($"//dbtype[@type={root.Attributes["default"]}]");
             DBViewerConfig config = DBViewerConfig.Create(node);
             return config;
         }
