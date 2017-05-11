@@ -96,30 +96,30 @@ namespace DBViewer.Model.MySql
             string newPKValue = GetPKValue(cm, tableColumns, tableName, "NEW");
             string oldPKValue = GetPKValue(cm, tableColumns, tableName, "OLD");
 
-            string newUserFieldName = "";
-            string oldUserFieldName = "";
+            string newUserFieldName = " ";
+            string oldUserFieldName = " ";
             //string newUserFieldName = GetSafeUserFieldName(tableColumns,"NEW");
             //string oldUserFieldName = GetSafeUserFieldName(tableColumns, "OLD");
 
             //1--insert 2--update 3--delete ,DELETE,UPDATE
             //Insert 语句记录
-            sqlBuilder.AppendFormat("create trigger dbvtr_{0}_insert after INSERT  on {0} for each row \n", tableName);
+            sqlBuilder.AppendFormat("create trigger {0}_insert after INSERT  on {1} for each row \n", triggerName, tableName);
             sqlBuilder.Append("BEGIN \n");    
             //RecDate,tableName,tabletype,status,PK,data,updateuser
-            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},{2});\n", newPKValue, newTableFieldValue, newUserFieldName, tableName);
+            sqlBuilder.AppendFormat("   insert into tr_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},'{2}');\n", newPKValue, newTableFieldValue, newUserFieldName, tableName);
             sqlBuilder.Append("END;\n");
 
             //Update 语句记录
-            sqlBuilder.AppendFormat("create trigger dbvtr_{0}_update after Update  on {0} for each row \n", tableName);
+            sqlBuilder.AppendFormat("create trigger {0}_update after Update  on {1} for each row \n", triggerName, tableName);
             sqlBuilder.Append("BEGIN \n");
-            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},{2});\n", newPKValue, newTableFieldValue, newUserFieldName, tableName);
-            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},{2});\n", oldPKValue, oldTableFieldValue, oldUserFieldName, tableName);
+            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,2,{0},{1},'{2}');\n", newPKValue, newTableFieldValue, newUserFieldName, tableName);
+            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,2,{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, oldUserFieldName, tableName);
             sqlBuilder.Append("END;\n");
 
             //Delete 语句记录
-            sqlBuilder.AppendFormat("create trigger dbvtr_{0}_delete after Delete  on {0} for each row \n", tableName);         
+            sqlBuilder.AppendFormat("create trigger {0}_delete after Delete  on {1} for each row \n", triggerName,tableName);         
             sqlBuilder.Append("BEGIN \n");
-            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},{2});\n", oldPKValue, oldTableFieldValue, oldUserFieldName, tableName);
+            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,3,{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, oldUserFieldName, tableName);
             sqlBuilder.Append("END; \n");
 
       
@@ -136,10 +136,10 @@ namespace DBViewer.Model.MySql
         private static void DeleteTrigger(ConnectionManager cm, string triggerName)
         {
             StringBuilder sql = new StringBuilder();
-            sql.AppendFormat("drop trigger if exists {0};", triggerName);
-            sql.AppendFormat("drop trigger if exists {0}_insert;", triggerName);
-            sql.AppendFormat("drop trigger if exists {0}_update;", triggerName);
-            sql.AppendFormat("drop trigger if exists {0}_delete;", triggerName);
+            sql.AppendFormat("drop trigger if exists {0};\n", triggerName);
+            sql.AppendFormat("drop trigger if exists {0}_insert;\n", triggerName);
+            sql.AppendFormat("drop trigger if exists {0}_update;\n", triggerName);
+            sql.AppendFormat("drop trigger if exists {0}_delete;\n", triggerName);
 
 
             cm.ExecuteCmd(sql.ToString());
@@ -182,11 +182,12 @@ namespace DBViewer.Model.MySql
                     string columnName = (string)row["COLUMN_NAME"];
                     DataRow[] columnRows = tableColumns.Select("name = '" + columnName + "'");
 
+                    
                     FillFieldValueString(sqlBuilder, columnRows[0],perfix);
                 }
 
                 string ret = sqlBuilder.ToString();
-                return ret.Substring(2);
+                return  $"concat({ret.Substring(2)})";
             }
             else
             {
@@ -204,7 +205,7 @@ namespace DBViewer.Model.MySql
         private static void FillFieldValueString(StringBuilder sqlBuilder,DataRow row,string perfix)
         {
             // sqlBuilder.AppendFormat("|| NVL('{0}=' || substr(to_char(:{1}.{0}),0,20) || ';','')", row["name"],perfix);
-            sqlBuilder.AppendFormat("+ isnull('{0}=' + convert(varchar,[{1}.{0}]) + ';','')", row["name"],perfix);
+            sqlBuilder.AppendFormat(", ifnull(nullif(concat('{0}=' , convert({1}.{0},char) , ';'),'{0}=;'),'')", row["name"],perfix);
         }
 
         private string GetSafeUserFieldName(DataTable tableColumns)
@@ -230,7 +231,7 @@ namespace DBViewer.Model.MySql
                 FillFieldValueString(sql, row, perfix);
             }
             string ret = sql.ToString();
-            return ret.Substring(2);
+            return $"concat({ret.Substring(2)})";
         }
 
 
