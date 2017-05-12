@@ -107,22 +107,22 @@ namespace DBViewer.Model.MySql
             sqlBuilder.AppendFormat("create trigger {0}_insert after INSERT  on {1} for each row \n", triggerName, tableName);
             sqlBuilder.Append("BEGIN \n");    
             //RecDate,tableName,tabletype,status,PK,data,updateuser
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", newPKValue, newTableFieldValue, TracerUser, tableName, TABLENAME, EnumOperatorType.New,EnumTableType.None);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", newPKValue, newTableFieldValue, TracerUser, tableName, TABLENAME, (int)EnumOperatorType.New, (int)EnumTableType.None);
             sqlBuilder.Append("END;\n");
 
             //Update 语句记录
             sqlBuilder.AppendFormat("create trigger {0}_update after Update  on {1} for each row \n", triggerName, tableName);
             sqlBuilder.Append("BEGIN \n");
             //注意,用tabletype与status来共同来识别 是更新的新值
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", newPKValue, newTableFieldValue, TracerUser, tableName, TABLENAME, EnumOperatorType.Update,EnumTableType.Inserted);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", newPKValue, newTableFieldValue, TracerUser, tableName, TABLENAME, (int)EnumOperatorType.Update, (int)EnumTableType.Inserted);
             //注意,用tabletype与status来共同来识别 是更新的旧值
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, TracerUser, tableName, TABLENAME, EnumOperatorType.Update,EnumTableType.Deleted);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, TracerUser, tableName, TABLENAME, (int)EnumOperatorType.Update, (int)EnumTableType.Deleted);
             sqlBuilder.Append("END;\n");
 
             //Delete 语句记录
             sqlBuilder.AppendFormat("create trigger {0}_delete after Delete  on {1} for each row \n", triggerName,tableName);         
             sqlBuilder.Append("BEGIN \n");
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, TracerUser, tableName, TABLENAME,EnumOperatorType.Delete, EnumTableType.None);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, TracerUser, tableName, TABLENAME, (int)EnumOperatorType.Delete, (int)EnumTableType.None);
             sqlBuilder.Append("END; \n");
 
       
