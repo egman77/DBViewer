@@ -12,7 +12,7 @@ namespace DBViewer.Model.MySql
     {
         private const string TR_PREFIX = "TR_";
         private const string TABLENAME = "DBV_LOGDATA";
-        private const string SEQUENCES = "DBVSEQUENCES";
+       // private const string SEQUENCES = "DBVSEQUENCES";
         #region IDBViewerModel 成员
 
         private ConnectionManager m_cm;
@@ -97,8 +97,8 @@ namespace DBViewer.Model.MySql
             string oldPKValue = GetPKValue(cm, tableColumns, tableName, "OLD");
 
             var ip = GetIP();
-            string newUserFieldName = " ";
-            string oldUserFieldName = " ";
+            //string newUserFieldName = " ";
+            //string oldUserFieldName = " ";
             //string newUserFieldName = GetSafeUserFieldName(tableColumns,"NEW");
             //string oldUserFieldName = GetSafeUserFieldName(tableColumns, "OLD");
 
@@ -107,20 +107,20 @@ namespace DBViewer.Model.MySql
             sqlBuilder.AppendFormat("create trigger {0}_insert after INSERT  on {1} for each row \n", triggerName, tableName);
             sqlBuilder.Append("BEGIN \n");    
             //RecDate,tableName,tabletype,status,PK,data,updateuser
-            sqlBuilder.AppendFormat("   insert into tr_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},'{2}');\n", newPKValue, newTableFieldValue, ip, tableName);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},'{2}');\n", newPKValue, newTableFieldValue, ip, tableName, TABLENAME);
             sqlBuilder.Append("END;\n");
 
             //Update 语句记录
             sqlBuilder.AppendFormat("create trigger {0}_update after Update  on {1} for each row \n", triggerName, tableName);
             sqlBuilder.Append("BEGIN \n");
-            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,2,{0},{1},'{2}');\n", newPKValue, newTableFieldValue, ip, tableName);
-            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,2,{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, ip, tableName);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,2,{0},{1},'{2}');\n", newPKValue, newTableFieldValue, ip, tableName, TABLENAME);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,2,{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, ip, tableName, TABLENAME);
             sqlBuilder.Append("END;\n");
 
             //Delete 语句记录
             sqlBuilder.AppendFormat("create trigger {0}_delete after Delete  on {1} for each row \n", triggerName,tableName);         
             sqlBuilder.Append("BEGIN \n");
-            sqlBuilder.AppendFormat("   insert into dbv_LOGDATA(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,3,{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, ip, tableName);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,3,{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, ip, tableName, TABLENAME);
             sqlBuilder.Append("END; \n");
 
       
@@ -303,30 +303,30 @@ namespace DBViewer.Model.MySql
         }
 
 
-        /// <summary>
-        /// 清除和创建的表队列
-        /// </summary>
-        /// <param name="cm"></param>
-        [Obsolete("可能不需要")]
-        private void EnsureCreateSequences(ConnectionManager cm)
-        {
+        ///// <summary>
+        ///// 清除和创建的表队列
+        ///// </summary>
+        ///// <param name="cm"></param>
+        //[Obsolete("可能不需要")]
+        //private void EnsureCreateSequences(ConnectionManager cm)
+        //{
 
-            StringBuilder sql = new StringBuilder();
-            sql.Append("DECLARE \n");
-            sql.Append("    v_count int;\n");
-            sql.Append("BEGIN \n");
-            sql.AppendFormat("SELECT  count(*) INTO v_count FROM USER_SEQUENCES WHERE SEQUENCE_NAME = '{0}'; \n", SEQUENCES);
-            sql.Append("  IF (v_count = 0) THEN \n");
-            sql.AppendFormat("        EXECUTE IMMEDIATE 'CREATE SEQUENCE  {0} minvalue 1 maxvalue 999999999999999999999999999 start with 1 "
-                                + " increment by 1 cache 50 order'; \n", SEQUENCES);
+        //    StringBuilder sql = new StringBuilder();
+        //    sql.Append("DECLARE \n");
+        //    sql.Append("    v_count int;\n");
+        //    sql.Append("BEGIN \n");
+        //    sql.AppendFormat("SELECT  count(*) INTO v_count FROM USER_SEQUENCES WHERE SEQUENCE_NAME = '{0}'; \n", SEQUENCES);
+        //    sql.Append("  IF (v_count = 0) THEN \n");
+        //    sql.AppendFormat("        EXECUTE IMMEDIATE 'CREATE SEQUENCE  {0} minvalue 1 maxvalue 999999999999999999999999999 start with 1 "
+        //                        + " increment by 1 cache 50 order'; \n", SEQUENCES);
 
-            sql.Append("    END IF;\n");
-            sql.Append("END;\n");
+        //    sql.Append("    END IF;\n");
+        //    sql.Append("END;\n");
 
-            cm.ExecuteCmd(sql.ToString());
+        //    cm.ExecuteCmd(sql.ToString());
             
 
-        }
+        //}
 
         /// <summary>
         /// 获取当前库下的所有表名
@@ -340,7 +340,7 @@ namespace DBViewer.Model.MySql
             //                                    + " ORDER BY TABLE_NAME ", TABLENAME);
 
             var sql = string.Format("SELECT TABLE_NAME as name FROM INFORMATION_SCHEMA.TABLES\n"
-                                               + " WHERE TABLE_SCHEMA = '{0}' and TABLE_NAME != '{0}' "
+                                               + " WHERE TABLE_SCHEMA = '{0}' and TABLE_NAME != '{1}' "
                                                + " ORDER BY TABLE_NAME ",m_cm.config.dbname, TABLENAME);
 
             DataTable table = m_cm.GetData(sql );
