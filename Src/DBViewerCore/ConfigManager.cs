@@ -19,10 +19,11 @@ namespace DBViewer.Model.Core
             {
                 dicConfig[EnumDBType.SQLServer] = new ModelInfo("DBViewer.Model.SQLServer.dll", "DBViewer.Model.SQLServer.DBConfig");
                 dicConfig[EnumDBType.Oracle] = new ModelInfo("DBViewer.Model.Oracle.dll", "DBViewer.Model.Oracle.DBConfig");
+                dicConfig[EnumDBType.MySql] = new ModelInfo("DBViewer.Model.MySql.dll", "DBViewer.Model.MySql.DBConfig");
 
                 dicViewerModel[EnumDBType.SQLServer] = new ModelInfo("DBViewer.Model.SQLServer.dll", "DBViewer.Model.SQLServer.DBViewerModel");
                 dicViewerModel[EnumDBType.Oracle] = new ModelInfo("DBViewer.Model.Oracle.dll", "DBViewer.Model.Oracle.DBViewerModel");
-
+                dicViewerModel[EnumDBType.MySql] = new ModelInfo("DBViewer.Model.MySql.dll", "DBViewer.Model.MySql.DBViewerModel");
             }
         }
 
@@ -64,15 +65,30 @@ namespace DBViewer.Model.Core
             }
         }
 
+        ///// <summary>
+        ///// 读取配置信息
+        ///// </summary>
+        ///// <param name="config"></param>
+        //public static DBViewerConfig GetConfig(string fileName)
+        //{
+        //    XmlDocument doc = new XmlDocument();
+        //    doc.Load(fileName);
+        //    XmlNode node = doc.SelectSingleNode("//dbtype");
+        //    DBViewerConfig config = DBViewerConfig.Create(node);
+        //    return config;
+        //}
+
         /// <summary>
-        /// 保存配置信息
+        /// 读取默认的配置信息
         /// </summary>
         /// <param name="config"></param>
         public static DBViewerConfig GetConfig(string fileName)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(fileName);
-            XmlNode node = doc.SelectSingleNode("dbtype");
+            XmlNode root=doc?.SelectSingleNode("/dbTypes");
+            var type = root.Attributes["default"].Value;
+            XmlNode node = root?.SelectSingleNode($"//dbtype[@type='{type}']");
             DBViewerConfig config = DBViewerConfig.Create(node);
             return config;
         }

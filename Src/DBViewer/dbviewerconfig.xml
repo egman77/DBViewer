@@ -1,11 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<dbtype type="SQLServer">
-  <displaynull>False</displaynull>
-  <userfieldname />
-  <traceuser>lyc</traceuser>
-  <server>127.0.0.1\SQLEXPRESS</server>
-  <user>sa</user>
-  <password>123</password>
-  <dbname>lyc</dbname>
-  
-</dbtype>
+<dbTypes default="MySql">
+  <dbtype type="SQLServer">
+    <displaynull>False</displaynull>
+    <userfieldname />
+    <traceuser>lyc</traceuser>
+    <server>.\SQLEXPRESS2012</server>
+    <user>sa</user>
+    <password>__CarveOut</password>
+    <dbname>TestDB</dbname>
+
+  </dbtype>
+  <dbtype type="MySql">
+    <displaynull>False</displaynull>
+    <userfieldname />
+    <traceuser>lyc</traceuser>
+    <server>localhost</server>
+    <user>root</user>
+    <password>__CarveOut</password>
+    <dbname>world</dbname>
+
+  </dbtype>
+  <dbtype type="Oracle">
+    <displaynull>False</displaynull>
+    <userfieldname />
+    <traceuser>lyc</traceuser>
+    <server>127.0.0.1\SQLEXPRESS</server>
+    <user>sa</user>
+    <password>789</password>
+    <dbname>lyc</dbname>
+
+  </dbtype>
+</dbTypes>

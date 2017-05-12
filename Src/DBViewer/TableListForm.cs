@@ -17,6 +17,7 @@ namespace DBViewer.UI
         public IDBViewerModel CurrentModel;
 
         public DoActionDelegate Action;
+
         public DoStartActionDelegate StartAction;
         public TableListForm()
         {
@@ -68,6 +69,11 @@ namespace DBViewer.UI
             this.Close();
         }
 
+        /// <summary>
+        /// 执行功能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnRun_Click(object sender, EventArgs e)
         {
             btnRun.Enabled = false;
@@ -91,7 +97,7 @@ namespace DBViewer.UI
                         row["selAll"] = false;
                         count++;
                     }
-                    catch {
+                    catch(Exception ex) {
                         failedCount++; 
                     }
                 }
@@ -104,6 +110,9 @@ namespace DBViewer.UI
             Util.ShowMessage(statusLabel.Text);
         }
 
+        /// <summary>
+        /// 开始动作
+        /// </summary>
         private void OnStartAction()
         {
             if (StartAction != null)

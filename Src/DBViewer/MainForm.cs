@@ -49,7 +49,9 @@ namespace DBViewer.UI
         {
 
             TableListForm form = new TableListForm();
+            //重构触发器
             form.Action =new DoActionDelegate(DoRebuilTrigger);
+            //创建表
             form.StartAction = new DoStartActionDelegate(DoCreateTable);
             form.CurrentModel = m_currentModel;
             form.Show(this);

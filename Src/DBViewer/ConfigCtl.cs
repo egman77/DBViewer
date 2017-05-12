@@ -34,6 +34,9 @@ namespace DBViewer.UI
                 case 1:
                     ctl = GetPanelControl(EnumDBType.Oracle);
                     break;
+                case 2:
+                    ctl = GetPanelControl(EnumDBType.MySql);
+                    break;
             }
 
             if (ctl != null)
@@ -57,11 +60,11 @@ namespace DBViewer.UI
         private XmlNode GetDBTypeNode(EnumDBType enuDbType)
         {
             string dbtype = enuDbType.ToString();
-            XmlNode node = m_doc.SelectSingleNode(string.Format("dbtype[@type='{0}']", dbtype));
+            XmlNode node = m_doc.SelectSingleNode(string.Format("//dbtype[@type='{0}']", dbtype));
             if (node == null)
             {
-                m_doc.LoadXml("<?xml version=\"1.0\" encoding=\"utf-8\" ?><dbtype></dbtype>");
-                node = m_doc.SelectSingleNode("dbtype");
+                m_doc.LoadXml($"<?xml version=\"1.0\" encoding=\"utf-8\" ?><dbTypes default=\"{enuDbType.ToString()}\"><dbtype></dbtype></dbTypes>");
+                node = m_doc.SelectSingleNode("//dbtype");
                 XmlAttribute attr = m_doc.CreateNode(XmlNodeType.Attribute,"type",string.Empty) as XmlAttribute;
                 attr.Value = dbtype;
 
@@ -77,7 +80,7 @@ namespace DBViewer.UI
                 
 
                
-                node = m_doc.SelectSingleNode(string.Format("dbtype[@type='{0}']", dbtype));
+                node = m_doc.SelectSingleNode(string.Format("//dbtype[@type='{0}']", dbtype));
             }
 
             return node;
@@ -95,6 +98,19 @@ namespace DBViewer.UI
                 m_currentDBConfig.TraceUser = txtUser.Text;
 
                 XmlNode node = GetDBTypeNode(m_currentDBConfig.DbType);
+
+                //替换默认属性类型
+                XmlNode root = node.ParentNode;
+                root.Attributes.RemoveNamedItem("default");
+
+                //取值，创建属性对象
+                var type = node.Attributes["type"].Value;
+                var attr = root.OwnerDocument.CreateAttribute("default");
+                attr.Value = type;
+
+                //添加属性
+                root.Attributes.Append(attr);
+
                 m_currentDBConfig.SaveToNode(node);
 
                 m_doc.Save(Path.Combine(Application.StartupPath, "dbviewerconfig.xml"));

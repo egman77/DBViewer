@@ -127,9 +127,9 @@ namespace DBViewer.Model.Oracle
 
             sqlBuilder.AppendFormat("   insert into dbv_LOGDATA (SEQNO,RecDate,tableName,tabletype,status,PK,data,updateuser)\n");
             sqlBuilder.AppendFormat("   VALUES ({3}.NEXTVAL,SYSDATE,'{2}',1,status,{0},{1},SYS_CONTEXT('USERENV','IP_ADDRESS'));\n"
-                                        , newPKValue
+                                        , oldPKValue
                                         , oldTableFieldValue
-                                        //, newUserFieldName
+                                        //, oldUserFieldName
                                         , tableName
                                         , SEQUENCES
                                         );

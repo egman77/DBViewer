@@ -1,0 +1,11 @@
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\obj\Debug\MySqlDBViewer.csprojResolveAssemblyReference.cache
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\obj\Debug\DBViewer.Model.MySQL.ConnectionConfig.resources
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\obj\Debug\MySqlDBViewer.csproj.GenerateResource.Cache
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\bin\Debug\DBViewer.Model.MySQL.dll
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\bin\Debug\DBViewer.Model.MySQL.pdb
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\bin\Debug\DBViewer.Model.Core.dll
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\bin\Debug\DBViewer.Model.Core.pdb
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\obj\Debug\DBViewer.Model.MySQL.dll
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\obj\Debug\DBViewer.Model.MySQL.pdb
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\bin\Debug\DBViewer.Model.MySQL.dll.config
+E:\hdh_git_workspaces\DBViewer\Src\MySqlDBViewer\bin\Debug\MySql.Data.dll
