@@ -59,6 +59,7 @@ namespace DBViewer.UI
                 EnumOperatorType status =  (EnumOperatorType)Util.ToInt(row["status"]);
                 EnumTableType tableType = (EnumTableType)Util.ToInt(row["tabletype"]);
 
+                //处理更新
                 if (status == EnumOperatorType.Update && tableType == EnumTableType.deleted)
                 {
                      updateRowCount = 0;
@@ -66,6 +67,7 @@ namespace DBViewer.UI
                     continue;
                 }
 
+                //处理新增或删除
                 if (status == EnumOperatorType.New || status == EnumOperatorType.Delete)
                 {
                     CreateNewOrDeleteRowData(table, m_FixColumnCount, row, status);

@@ -10,6 +10,7 @@ namespace DBViewer.Model.Core
     /// </summary>
     public enum EnumTableType
     {
+        none=0,
         inserted = 0 ,
         deleted = 1,
     }
