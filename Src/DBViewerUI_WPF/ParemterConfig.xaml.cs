@@ -56,10 +56,10 @@ namespace DBViewer.UI.WPF
             }
 
             m_currentDBConfig = DBViewerConfig.Create(GetDBTypeNode(enuDBType));
-            txtServer.Text = m_currentDBConfig.server;
-            txtDBName.Text = m_currentDBConfig.dbname;
-            txtDBUser.Text = m_currentDBConfig.user;
-            txtPassword.Text = m_currentDBConfig.password;
+            txtServer.Text = m_currentDBConfig.Server;
+            txtDBName.Text = m_currentDBConfig.DbName;
+            txtDBUser.Text = m_currentDBConfig.User;
+            txtPassword.Text = m_currentDBConfig.Password;
             chkDisplayNull.IsChecked = m_currentDBConfig.DisplayNull;
             txtUserFieldName.Text = m_currentDBConfig.UserFieldName;
             txtUser.Text = m_currentDBConfig.TraceUser;
@@ -101,10 +101,10 @@ namespace DBViewer.UI.WPF
             if (cmbDBType.SelectedIndex != -1)
             {
                 m_currentDBConfig.DbType = cmbDBType.SelectedIndex == 0 ? EnumDBType.SQLServer : EnumDBType.Oracle;
-                m_currentDBConfig.server = txtServer.Text;
-                m_currentDBConfig.dbname = txtDBName.Text;
-                m_currentDBConfig.user = txtDBUser.Text;
-                m_currentDBConfig.password = txtPassword.Text;
+                m_currentDBConfig.Server = txtServer.Text;
+                m_currentDBConfig.DbName = txtDBName.Text;
+                m_currentDBConfig.User = txtDBUser.Text;
+                m_currentDBConfig.Password = txtPassword.Text;
 
                 m_currentDBConfig.DisplayNull = chkDisplayNull.IsChecked.Value;
                 m_currentDBConfig.UserFieldName = txtUserFieldName.Text;

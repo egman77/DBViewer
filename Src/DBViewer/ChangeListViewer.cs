@@ -60,7 +60,7 @@ namespace DBViewer.UI
                 EnumTableType tableType = (EnumTableType)Util.ToInt(row["tabletype"]);
 
                 //处理更新
-                if (status == EnumOperatorType.Update && tableType == EnumTableType.deleted)
+                if (status == EnumOperatorType.Update && tableType == EnumTableType.Deleted)
                 {
                      updateRowCount = 0;
                     //更新的数据，delete已经处理过了，继续循环
@@ -191,7 +191,7 @@ namespace DBViewer.UI
                 DataRow nextRow = orginalData.Rows[i];
                 EnumTableType tableType = (EnumTableType)Util.ToInt(nextRow["tabletype"]);
 
-                if (tableType == EnumTableType.deleted)
+                if (tableType == EnumTableType.Deleted)
                 {
                     //删除行，Update行已经结束
                     break;

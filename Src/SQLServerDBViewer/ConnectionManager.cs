@@ -45,10 +45,10 @@ namespace DBViewer.Model.SQLServer
         private string GetConnectionString()
         {
            return string.Format("Data Source={0};Initial Catalog={1};User Id={2};Password={3}"
-                            ,config.server
-                            ,config.dbname
-                            ,config.user
-                            ,config.password);
+                            ,config.Server
+                            ,config.DbName
+                            ,config.User
+                            ,config.Password);
 
         }
     }

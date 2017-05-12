@@ -69,7 +69,7 @@ namespace DBViewer.Model.MySql
             //            + "where t.table_name = '{0}' and t.data_type not in ('long')\n";
             string sql = "select COLUMN_NAME as name , DATA_TYPE as typeName from information_schema.columns where  TABLE_SCHEMA='{0}' and table_name = '{1}' ";
 
-            return cm.GetData(string.Format(sql,cm.config.dbname, tableName));
+            return cm.GetData(string.Format(sql,cm.config.DbName, tableName));
         }
 
         private string GetTriggerName(string tableName)
@@ -107,22 +107,22 @@ namespace DBViewer.Model.MySql
             sqlBuilder.AppendFormat("create trigger {0}_insert after INSERT  on {1} for each row \n", triggerName, tableName);
             sqlBuilder.Append("BEGIN \n");    
             //RecDate,tableName,tabletype,status,PK,data,updateuser
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", newPKValue, newTableFieldValue, TracerUser, tableName, TABLENAME, EnumOperatorType.New,EnumTableType.none);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", newPKValue, newTableFieldValue, TracerUser, tableName, TABLENAME, EnumOperatorType.New,EnumTableType.None);
             sqlBuilder.Append("END;\n");
 
             //Update 语句记录
             sqlBuilder.AppendFormat("create trigger {0}_update after Update  on {1} for each row \n", triggerName, tableName);
             sqlBuilder.Append("BEGIN \n");
             //注意,用tabletype与status来共同来识别 是更新的新值
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", newPKValue, newTableFieldValue, TracerUser, tableName, TABLENAME, EnumOperatorType.Update,EnumTableType.inserted);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", newPKValue, newTableFieldValue, TracerUser, tableName, TABLENAME, EnumOperatorType.Update,EnumTableType.Inserted);
             //注意,用tabletype与status来共同来识别 是更新的旧值
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, TracerUser, tableName, TABLENAME, EnumOperatorType.Update,EnumTableType.deleted);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, TracerUser, tableName, TABLENAME, EnumOperatorType.Update,EnumTableType.Deleted);
             sqlBuilder.Append("END;\n");
 
             //Delete 语句记录
             sqlBuilder.AppendFormat("create trigger {0}_delete after Delete  on {1} for each row \n", triggerName,tableName);         
             sqlBuilder.Append("BEGIN \n");
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, TracerUser, tableName, TABLENAME,EnumOperatorType.Delete, EnumTableType.none);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',{6},{5},{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, TracerUser, tableName, TABLENAME,EnumOperatorType.Delete, EnumTableType.None);
             sqlBuilder.Append("END; \n");
 
       
@@ -172,7 +172,7 @@ namespace DBViewer.Model.MySql
             //                + "  ORDER BY t1.POSITION", tableName);
 
             string sql = "select COLUMN_NAME from information_schema.columns \n"+
-                $"where  TABLE_SCHEMA='{cm.config.dbname}' and table_name = '{tableName}' and COLUMN_KEY='PRI'"+
+                $"where  TABLE_SCHEMA='{cm.config.DbName}' and table_name = '{tableName}' and COLUMN_KEY='PRI'"+
                 "ORDER BY ORDINAL_POSITION";
 
             DataTable pkData = cm.GetData(sql);
@@ -270,7 +270,9 @@ namespace DBViewer.Model.MySql
         {
             try
             {
-                m_cm.ExecuteCmd("DELETE FROM  " + TABLENAME + " WHERE (UpdateUser = '" + GetIP() + "' )");
+                var tracerUser = userName ?? GetIP(); //如果没有,则用客户机IP代替
+
+                m_cm.ExecuteCmd("DELETE FROM  " + TABLENAME + " WHERE (UpdateUser = '" + tracerUser + "' )");
             }
             catch { }
         }
@@ -289,10 +291,10 @@ namespace DBViewer.Model.MySql
 
             sql = new StringBuilder();
             sql.AppendFormat("  CREATE  TABLE {0} ( \n"
-                     + " SEQNO  int auto_increment  NOT NULL\n"
-                     + ",TABLETYPE int  \n"
+                     + " SEQNO  int auto_increment  NOT NULL\n"                    
                      + ",RecDate DATE\n"
                      + ",tablename  varchar(40)  \n"
+                     + ",TABLETYPE int  \n"
                      + ",status  int  \n"
                      + ",PK  VARCHAR(200) \n"
                      + ",Data  VARCHAR(3000) \n"
@@ -344,7 +346,7 @@ namespace DBViewer.Model.MySql
 
             var sql = string.Format("SELECT TABLE_NAME as name FROM INFORMATION_SCHEMA.TABLES\n"
                                                + " WHERE TABLE_SCHEMA = '{0}' and TABLE_NAME != '{1}' "
-                                               + " ORDER BY TABLE_NAME ",m_cm.config.dbname, TABLENAME);
+                                               + " ORDER BY TABLE_NAME ",m_cm.config.DbName, TABLENAME);
 
             DataTable table = m_cm.GetData(sql );
             return table;

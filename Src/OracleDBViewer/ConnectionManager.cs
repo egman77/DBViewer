@@ -46,9 +46,9 @@ namespace DBViewer.Model.Oracle
         private string GetConnectionString()
         {
             return string.Format("Data Source={0};User Id={1};Password={2};"
-                            ,config.dbname
-                            ,config.user
-                            ,config.password);
+                            ,config.DbName
+                            ,config.User
+                            ,config.Password);
 
         }
     }
