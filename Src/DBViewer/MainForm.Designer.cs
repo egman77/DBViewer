@@ -202,7 +202,7 @@
             this.tabTools.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.tabTools.Name = "tabTools";
             this.tabTools.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.tabTools.Size = new System.Drawing.Size(1127, 655);
+            this.tabTools.Size = new System.Drawing.Size(1127, 654);
             this.tabTools.TabIndex = 1;
             this.tabTools.Text = "系统工具";
             this.tabTools.UseVisualStyleBackColor = true;
@@ -237,7 +237,7 @@
             this.tabParam.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.tabParam.Name = "tabParam";
             this.tabParam.Padding = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.tabParam.Size = new System.Drawing.Size(1127, 655);
+            this.tabParam.Size = new System.Drawing.Size(1127, 654);
             this.tabParam.TabIndex = 2;
             this.tabParam.Text = "参数配置";
             this.tabParam.UseVisualStyleBackColor = true;
@@ -259,7 +259,7 @@
             this.configCtl1.Location = new System.Drawing.Point(6, 5);
             this.configCtl1.Margin = new System.Windows.Forms.Padding(11, 9, 11, 9);
             this.configCtl1.Name = "configCtl1";
-            this.configCtl1.Size = new System.Drawing.Size(1115, 645);
+            this.configCtl1.Size = new System.Drawing.Size(1115, 644);
             this.configCtl1.TabIndex = 0;
             // 
             // MainForm
@@ -269,6 +269,7 @@
             this.ClientSize = new System.Drawing.Size(1135, 766);
             this.Controls.Add(this.tabMain);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.Name = "MainForm";
             this.Text = "DB Viewer";

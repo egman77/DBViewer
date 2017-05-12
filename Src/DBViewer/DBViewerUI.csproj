@@ -40,6 +40,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -136,9 +139,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dbviewerconfig.xml">
+    <Content Include="App_16X16.ico" />
+    <Content Include="App.ico" />
+    <Content Include="App_32X32.ico" />
+    <Content Include="App_48X48.ico" />
+    <Content Include="App_64X64.ico" />
+    <Content Include="DBViewerConfig.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ico.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
@@ -147,7 +156,10 @@ xcopy $(SolutionDir)SQLServerDBViewer\$(OutDir)*.pdb  $(TargetDir)*.*  /y
 xcopy $(SolutionDir)MySqlDBViewer\$(OutDir)*.dll  $(TargetDir)*.* /y
 xcopy $(SolutionDir)MySqlDBViewer\$(OutDir)*.pdb  $(TargetDir)*.*  /y
 xcopy $(SolutionDir)OracleDBViewer\$(OutDir)*.dll  $(TargetDir)*.* /y
-xcopy $(SolutionDir)OracleDBViewer\$(OutDir)*.pdb  $(TargetDir)*.*  /y</PostBuildEvent>
+xcopy $(SolutionDir)OracleDBViewer\$(OutDir)*.pdb  $(TargetDir)*.*  /y
+
+xcopy    $(TargetDir)*.*   $(SolutionDir)..\bins\*.* /y
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

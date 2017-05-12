@@ -61,11 +61,12 @@
             this.selAll,
             this.tableName});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 41);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 63);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 23;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(514, 313);
+            this.dataGridView1.Size = new System.Drawing.Size(942, 564);
             this.dataGridView1.TabIndex = 0;
             // 
             // selAll
@@ -87,6 +88,7 @@
             // 
             // toolMain
             // 
+            this.toolMain.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.toolMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnRun,
             this.toolStripSeparator1,
@@ -98,7 +100,8 @@
             this.btnExit});
             this.toolMain.Location = new System.Drawing.Point(0, 0);
             this.toolMain.Name = "toolMain";
-            this.toolMain.Size = new System.Drawing.Size(514, 41);
+            this.toolMain.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolMain.Size = new System.Drawing.Size(942, 63);
             this.toolMain.TabIndex = 1;
             this.toolMain.Text = "toolStrip1";
             // 
@@ -108,7 +111,7 @@
             this.btnRun.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnRun.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnRun.Name = "btnRun";
-            this.btnRun.Size = new System.Drawing.Size(36, 38);
+            this.btnRun.Size = new System.Drawing.Size(58, 60);
             this.btnRun.Text = "执行";
             this.btnRun.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
@@ -116,7 +119,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 41);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 63);
             // 
             // btnSelAll
             // 
@@ -124,7 +127,7 @@
             this.btnSelAll.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnSelAll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSelAll.Name = "btnSelAll";
-            this.btnSelAll.Size = new System.Drawing.Size(36, 38);
+            this.btnSelAll.Size = new System.Drawing.Size(58, 60);
             this.btnSelAll.Text = "全选";
             this.btnSelAll.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnSelAll.Click += new System.EventHandler(this.btnSelAll_Click);
@@ -134,7 +137,7 @@
             this.btnClear.Image = ((System.Drawing.Image)(resources.GetObject("btnClear.Image")));
             this.btnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(36, 38);
+            this.btnClear.Size = new System.Drawing.Size(58, 60);
             this.btnClear.Text = "全清";
             this.btnClear.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
@@ -142,53 +145,57 @@
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 41);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 63);
             // 
             // txtFilter
             // 
             this.txtFilter.Name = "txtFilter";
-            this.txtFilter.Size = new System.Drawing.Size(100, 41);
+            this.txtFilter.Size = new System.Drawing.Size(180, 63);
             this.txtFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtFilter_KeyDown);
             // 
             // toolStripSplitButton1
             // 
             this.toolStripSplitButton1.Name = "toolStripSplitButton1";
-            this.toolStripSplitButton1.Size = new System.Drawing.Size(6, 41);
+            this.toolStripSplitButton1.Size = new System.Drawing.Size(6, 63);
             // 
             // btnExit
             // 
             this.btnExit.Image = ((System.Drawing.Image)(resources.GetObject("btnExit.Image")));
             this.btnExit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(36, 38);
+            this.btnExit.Size = new System.Drawing.Size(58, 60);
             this.btnExit.Text = "关闭";
             this.btnExit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 354);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 627);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(514, 23);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 26, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(942, 33);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // statusLabel
             // 
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(32, 18);
+            this.statusLabel.Size = new System.Drawing.Size(54, 28);
             this.statusLabel.Text = "就绪";
             // 
             // TableListForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(514, 377);
+            this.ClientSize = new System.Drawing.Size(942, 660);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.toolMain);
             this.Controls.Add(this.statusStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.Name = "TableListForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "数据库表";
