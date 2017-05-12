@@ -4,10 +4,10 @@
     <displaynull>False</displaynull>
     <userfieldname />
     <traceuser>lyc</traceuser>
-    <server>127.0.0.1\SQLEXPRESS</server>
+    <server>.\SQLEXPRESS2012</server>
     <user>sa</user>
-    <password>123</password>
-    <dbname>lyc</dbname>
+    <password>__CarveOut</password>
+    <dbname>TestDB</dbname>
 
   </dbtype>
   <dbtype type="MySql">
