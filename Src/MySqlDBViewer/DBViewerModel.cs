@@ -96,7 +96,7 @@ namespace DBViewer.Model.MySql
             string newPKValue = GetPKValue(cm, tableColumns, tableName, "NEW");
             string oldPKValue = GetPKValue(cm, tableColumns, tableName, "OLD");
 
-            var ip = GetIP();
+            var TracerUser = cm.config.TraceUser??GetIP(); //如果没有,则用客户机IP代替
             //string newUserFieldName = " ";
             //string oldUserFieldName = " ";
             //string newUserFieldName = GetSafeUserFieldName(tableColumns,"NEW");
@@ -107,20 +107,20 @@ namespace DBViewer.Model.MySql
             sqlBuilder.AppendFormat("create trigger {0}_insert after INSERT  on {1} for each row \n", triggerName, tableName);
             sqlBuilder.Append("BEGIN \n");    
             //RecDate,tableName,tabletype,status,PK,data,updateuser
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},'{2}');\n", newPKValue, newTableFieldValue, ip, tableName, TABLENAME);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,1,{0},{1},'{2}');\n", newPKValue, newTableFieldValue, TracerUser, tableName, TABLENAME);
             sqlBuilder.Append("END;\n");
 
             //Update 语句记录
             sqlBuilder.AppendFormat("create trigger {0}_update after Update  on {1} for each row \n", triggerName, tableName);
             sqlBuilder.Append("BEGIN \n");
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,2,{0},{1},'{2}');\n", newPKValue, newTableFieldValue, ip, tableName, TABLENAME);
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,2,{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, ip, tableName, TABLENAME);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,2,{0},{1},'{2}');\n", newPKValue, newTableFieldValue, TracerUser, tableName, TABLENAME);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,2,{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, TracerUser, tableName, TABLENAME);
             sqlBuilder.Append("END;\n");
 
             //Delete 语句记录
             sqlBuilder.AppendFormat("create trigger {0}_delete after Delete  on {1} for each row \n", triggerName,tableName);         
             sqlBuilder.Append("BEGIN \n");
-            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,3,{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, ip, tableName, TABLENAME);
+            sqlBuilder.AppendFormat("   insert into {4}(RecDate,tableName,tabletype,status,PK,data,updateuser) values( now(),'{3}',0,3,{0},{1},'{2}');\n", oldPKValue, oldTableFieldValue, TracerUser, tableName, TABLENAME);
             sqlBuilder.Append("END; \n");
 
       
@@ -243,11 +243,12 @@ namespace DBViewer.Model.MySql
 
         public DataTable GetTraceData(string userName, DateTime startTime)
         {
-            string ip = GetIP(); 
+           // string ip = GetIP();
+            var tracerUser = userName ?? GetIP(); //如果没有,则用客户机IP代替
             //string sql = "SELECT * FROM {0} WHERE (UPDATEUSER = '{1}' OR UPDATEUSER= ' ') AND RECDATE >= TO_DATE('{2}','yyyy/mm/dd hh24:mi:ss') order by SEQNO";
             string sql = "SELECT * FROM {0} WHERE (UPDATEUSER = '{1}' ) AND RECDATE >= DATE_FORMAT('{2}','%Y/%m/%d %H:%i:%s') order by SEQNO";
 
-            return m_cm.GetData(string.Format(sql, TABLENAME, ip, startTime.ToString("yyyy/MM/dd HH:mm:ss")));
+            return m_cm.GetData(string.Format(sql, TABLENAME, tracerUser, startTime.ToString("yyyy/MM/dd HH:mm:ss")));
         }
 
         private string GetIP()
